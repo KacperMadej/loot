@@ -5,6 +5,15 @@ listIcon.onclick = () => {
     listView.classList.remove('nah');
 }
 
+// pre-init --
+// --
+player = {
+    holding: false,
+    use: function(dbEntry) {
+        //TODO
+    }
+};
+
 // init --
 // --
 
@@ -52,10 +61,26 @@ Array.prototype.forEach.call(exits, exit => {
     };
 });
 
+// hand - use
+function getHandHTML(dbEntry) {
+    const elem = document.createElement('span');
+    elem.classList.add('hand-use');
+    elem.classList.add('midIcon');
+    elem.innerHTML = '✋';
+
+    // click action
+    elem.onclick = function() {
+        player.use(dbEntry);
+    };
+
+    return elem;
+}
+
 // info display
 const db = {
     '🛒': {top: '??', main: 'Looks kind of like a cart...'},
-    '🍩': {top: 'Donut', main: 'A tasty looking ring-shaped snak.'}
+    '🍩': {top: 'Donut', main: 'A tasty looking ring-shaped snak.'},
+    '🕰️': {top: 'Clock', main: 'Allows time adjustment.', use: true}
 };
 const info = document.getElementById('info');
 const infoTop = document.getElementById('info-top');
@@ -66,11 +91,17 @@ function showInfo(dbKey) {
         main: 'Unknown'
     };
     info.classList.remove('nah');
-    
+
     infoTop.innerHTML = `<span class="bold-text">ITEM NAME:</span><br/>
     <span>${dbEntry.top}</span>`;
 
     infoMain.innerHTML = `<span>${dbEntry.main}</span>`;
+
+    if (dbEntry.use) {
+        // add hand icon
+        infoMain.innerHTML += '<br/>';
+        infoMain.appendChild(getHandHTML(dbEntry));
+    }
 }
 function hideInfo() {
     info.classList.add('nah');

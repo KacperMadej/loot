@@ -5,6 +5,42 @@ listIcon.onclick = () => {
     listView.classList.remove('nah');
 }
 
+// init --
+// --
+
+// populate invetory
+const listItems = document.getElementById('listItems');
+
+const invSets = [{
+    name: 'w57',
+    items: ['🧮', '🛒', '🍩', '⛑️']
+},{
+    name: 'w58',
+    items: ['🕰️']
+}];
+
+invSets.forEach((iSet, i) => {
+    const setName = iSet.name;
+
+    // push separator
+    const elem = document.createElement('span');
+    elem.classList.add('iconSeparator');
+    elem.innerHTML = setName;
+    listItems.appendChild(elem);
+
+    // push items
+    iSet.items.forEach((it) => {
+        const elem = document.createElement('span');
+        elem.classList.add('midIcon');
+        elem.classList.add('setName');
+        elem.innerHTML = it;
+        listItems.appendChild(elem);
+    });
+});
+
+// active --
+// --
+
 // close - exit
 function close(what) {
     document.getElementById(what).classList.add('nah');

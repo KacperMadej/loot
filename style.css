@@ -37,6 +37,8 @@ body > div {
     border: 2px solid transparent;
     box-sizing: border-box;
     font-size: 30px;
+    width: 60px;
+    height: 60px;
 }
 .midIcon:hover {
     background-color: rgba(255,255,255,0.3);
@@ -62,25 +64,34 @@ body > div {
     text-align: center;
 }
 #listView {
+    position: absolute;
+    top: 5%;
+    left: 5%;
     width: 90%;
     margin: auto;
-    height: 100%;
-    background-color: rgb(252,246,144);
+    height: 90%;
+    background: rgb(252,246,144);
+    background: linear-gradient(90deg, rgb(167,33,6) 0%, rgb(252,246,144) 10%, rgb(252,246,144) 90%, rgb(217,231,89) 100%);
 }
 #listItems {
     width: 80%;
     margin: auto;
-    height: 65px;
     text-align: center;
     padding-top: 5px;
     border-style: none none double none;
     border-width: 10px;
-    border-color: rgb(212,159,119);
+    border-color: black;
 }
 #listItems span {
     display: inline-block;
+}
+.iconSeparator {
+    transform: rotate(-90deg);
+    color: white;
+    background-color: black;
+    line-height: 20px;
+    font-size: 14px;
     width: 60px;
-    height: 60px;
 }
 .selected-item {
     border: 2px solid black !important;

@@ -36,6 +36,9 @@ function showInfo(dbKey) {
 
     infoMain.innerHTML = `<span>${dbEntry.main}</span>`;
 }
+function hideInfo() {
+    info.classList.add('nah');
+}
 
 // item slection
 const midIcons = document.getElementsByClassName('midIcon');
@@ -43,9 +46,16 @@ let currentIcon;
 Array.prototype.forEach.call(midIcons, icon => {
     icon.onclick = () => {
         currentIcon && currentIcon.classList.remove('selected-item');
-        icon.classList.add('selected-item');
-        currentIcon = icon;
-        showInfo(icon.innerHTML);
+        if (icon === currentIcon) {
+            // deselect
+            hideInfo();
+            currentIcon = null;
+        } else {
+            // select
+            icon.classList.add('selected-item');
+            currentIcon = icon;
+            showInfo(icon.innerHTML);
+        }
     };
 });
 

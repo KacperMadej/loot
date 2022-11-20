@@ -13,17 +13,27 @@
             <span class="bigIcon" id="listIcon">📃</span>
         </div>
     </div>
+
+    <div class="nah" id="listView">
+        <div class="exit" data-what="listView">
+            <span class="bigIcon">❌</span>
+        </div>
+        <div class="list" id="listItems">
+        </div>
+        <div class="nah" id="info">
+            <div id="info-top"></div>
+            <br/>
+            <div id="info-main"></div>
+        </div>
+    </div>
+
     <div id="main">
-        <div class="nah" id="listView">
-            <div class="exit" data-what="listView">
-                <span class="bigIcon">❌</span>
-            </div>
-            <div class="list" id="listItems">
-            </div>
-            <div class="nah" id="info">
-                <div id="info-top"></div>
-                <br/>
-                <div id="info-main"></div>
+        <div class="backPlate" id="bgSky"></div>
+        <div id="hand">
+            <div class="layerPart layerBig">✋</div>
+            <div class="slider-container nah" id="ctrl-slider">
+                <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
+                <div id="sliderVal">-</div>
             </div>
         </div>
     </div>

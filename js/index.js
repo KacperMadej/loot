@@ -9,13 +9,65 @@ listIcon.onclick = () => {
 // --
 player = {
     holding: false,
-    use: function(dbEntry) {
-        //TODO
+    hand: document.getElementById('hand'),
+    // init
+    init: function() {
+    },
+    // hold and reveal item iterface
+    use: function(dbKey, dbEntry) {
+        if (this.holding) {
+            this.drop();
+        }
+        const elem = document.createElement('div');
+        elem.classList.add('layerPart');
+        elem.classList.add('layerNormal');
+        elem.innerHTML = dbKey;
+        elem.onclick = this.drop.bind(this);
+        this.hand.appendChild(elem);
+        this.holding = {
+            elem,
+            db: [dbKey, dbEntry],
+            name: dbKey,
+            ondrop: dbEntry.ondrop || function(){},
+            slider: dbEntry.onslide || function(){},
+        };
+        if (dbEntry.onhold) {
+            dbEntry.onhold(elem);
+        }
+        if (dbEntry.onslide) {
+            sliderVal.innerHTML = dbEntry.onslide(myRange.value);
+        }
+    },
+    // drop held item
+    drop: function() {
+        if (this.holding) {
+            this.holding.elem.remove();
+            this.holding.ondrop();
+            this.holding = false;
+        }
+    },
+    // on slider change
+    slider: function(val) {
+        if (!this.holding) {
+            return val;
+        }
+
+        return this.holding.slider(val);
     }
 };
 
 // init --
 // --
+
+// init player
+player.init();
+
+// init slider
+const myRange = document.getElementById('myRange');
+const sliderVal = document.getElementById('sliderVal');
+myRange.oninput = function() {
+    sliderVal.innerHTML = player.slider(this.value);
+}
 
 // populate invetory
 const listItems = document.getElementById('listItems');
@@ -50,9 +102,12 @@ invSets.forEach((iSet, i) => {
 // active --
 // --
 
-// close - exit
+// close - exit and show
 function close(what) {
     document.getElementById(what).classList.add('nah');
+}
+function show(what) {
+    document.getElementById(what).classList.remove('nah');
 }
 const exits = document.getElementsByClassName('exit');
 Array.prototype.forEach.call(exits, exit => {
@@ -62,7 +117,7 @@ Array.prototype.forEach.call(exits, exit => {
 });
 
 // hand - use
-function getHandHTML(dbEntry) {
+function getHandHTML(dbKey, dbEntry) {
     const elem = document.createElement('span');
     elem.classList.add('hand-use');
     elem.classList.add('midIcon');
@@ -70,7 +125,8 @@ function getHandHTML(dbEntry) {
 
     // click action
     elem.onclick = function() {
-        player.use(dbEntry);
+        player.use(dbKey, dbEntry);
+        close('listView');
     };
 
     return elem;
@@ -80,7 +136,23 @@ function getHandHTML(dbEntry) {
 const db = {
     '🛒': {top: '??', main: 'Looks kind of like a cart...'},
     '🍩': {top: 'Donut', main: 'A tasty looking ring-shaped snak.'},
-    '🕰️': {top: 'Clock', main: 'Allows time adjustment.', use: true}
+    '🕰️': {
+        top: 'Clock', main: 'Allows time adjustment.', use: true,
+        onhold: function() {
+            show('ctrl-slider');
+        },
+        ondrop: function() {
+            close('ctrl-slider');
+        },
+        onslide: function(val) {
+            // return time HH:MM
+            const perc = val / 100;
+            const h = Math.floor(24 * perc);
+            const m = Math.floor(((24 * perc) - h) * 60);
+
+            return `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}`;
+        }
+    }
 };
 const info = document.getElementById('info');
 const infoTop = document.getElementById('info-top');
@@ -100,7 +172,7 @@ function showInfo(dbKey) {
     if (dbEntry.use) {
         // add hand icon
         infoMain.innerHTML += '<br/>';
-        infoMain.appendChild(getHandHTML(dbEntry));
+        infoMain.appendChild(getHandHTML(dbKey, dbEntry));
     }
 }
 function hideInfo() {

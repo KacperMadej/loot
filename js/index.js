@@ -132,6 +132,18 @@ function getHandHTML(dbKey, dbEntry) {
     return elem;
 }
 
+// set time
+const html = document.getElementById('html'); 
+function setTime(h, m, perc) {
+    const r = (h < 6 || h > 22) ?
+        0 :
+        Math.min(255, 255 * (perc < 0.75 ? (perc * 2 - 0.5) : (1 - perc + 0.75)) * 2);
+    const g = perc < 0.5 ? perc * 200 : (1 - perc) * 200;
+    const b = perc < 0.5 ? perc * 200 : (1 - perc) * 200;
+    html.style.background = `rgba(${r}, ${g}, ${b})`;
+    console.log(html.style.background, r);
+}
+
 // info display
 const db = {
     '🛒': {top: '??', main: 'Looks kind of like a cart...'},
@@ -149,6 +161,8 @@ const db = {
             const perc = val / 100;
             const h = Math.floor(24 * perc);
             const m = Math.floor(((24 * perc) - h) * 60);
+
+            setTime(h, m, perc);
 
             return `${h < 10 ? '0' + h : h}:${m < 10 ? '0' + m : m}`;
         }
